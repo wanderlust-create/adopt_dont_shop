@@ -24,6 +24,28 @@ RSpec.describe Shelter, type: :model do
   end
 
   describe 'class methods' do
+    describe '#pending_applications' do
+      it 'returns shelters with pending applications' do
+        @app_1= Application.create(first_name: 'Lemon', last_name: 'Tiger', street_address: '1225 Alvaro Obgeron Dr.', city: 'Mexico City, GA', post_code: '67518', status: "In Progress")
+        @app_2= Application.create(first_name: 'Salty', last_name: 'Hippo', street_address: '367 CBTIS Overton St.', city: 'Colima, DC', post_code: '14628', status: "Pending")
+        @app_3= Application.create(first_name: 'Funky', last_name: 'Platypus', street_address: '15 Overpath Pkwy.', city: 'Shenzhen, OH', post_code: '97627', status: "In Progress")
+        @app_4= Application.create(first_name: 'Happy', last_name: 'Potter', street_address: '12 Down Town', city: 'Columbus, NJ', post_code: '89725', status: "Pending")
+
+        ApplicationPet.create!(pet_id:@pet_1.id, application_id: @app_2.id)
+        ApplicationPet.create!(pet_id:@pet_2.id, application_id: @app_2.id)
+        ApplicationPet.create!(pet_id:@pet_3.id, application_id: @app_4.id)
+
+       expect(Shelter.pending_applications).to eq([@shelter_3, @shelter_1])
+      end
+    end
+
+  describe 'class methods' do
+    describe '#admin/shelter index is listed in recerse alphabetical order' do
+      it 'returns shelters with pending applications' do
+
+       expect(Shelter.order_reverse_alphaetical).to eq([@shelter_2, @shelter_3, @shelter_1])
+      end
+    end
     describe '#search' do
       it 'returns partial matches' do
         expect(Shelter.search("Fancy")).to eq([@shelter_3])
@@ -49,6 +71,7 @@ RSpec.describe Shelter, type: :model do
         expect(@shelter_1.adoptable_pets).to eq([@pet_2, @pet_4])
       end
     end
+  end
 
     describe '.alphabetical_pets' do
       it 'returns pets associated with the given shelter in alphabetical name order' do
