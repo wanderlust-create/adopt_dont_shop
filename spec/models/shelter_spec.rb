@@ -35,43 +35,43 @@ RSpec.describe Shelter, type: :model do
         ApplicationPet.create!(pet_id:@pet_2.id, application_id: @app_2.id)
         ApplicationPet.create!(pet_id:@pet_3.id, application_id: @app_4.id)
 
-       expect(Shelter.pending_applications).to eq([@shelter_3, @shelter_1])
+        expect(Shelter.pending_applications).to eq([@shelter_1, @shelter_3])
       end
     end
 
-  describe 'class methods' do
-    describe '#admin/shelter index is listed in recerse alphabetical order' do
-      it 'returns shelters with pending applications' do
+    describe 'class methods' do
+      describe '#admin/shelter index is listed in recerse alphabetical order' do
+        it 'returns shelters with pending applications' do
 
-       expect(Shelter.order_reverse_alphaetical).to eq([@shelter_2, @shelter_3, @shelter_1])
+          expect(Shelter.order_reverse_alphaetical).to eq([@shelter_2, @shelter_3, @shelter_1])
+        end
       end
-    end
-    describe '#search' do
-      it 'returns partial matches' do
-        expect(Shelter.search("Fancy")).to eq([@shelter_3])
+      describe '#search' do
+        it 'returns partial matches' do
+          expect(Shelter.search("Fancy")).to eq([@shelter_3])
+        end
+      end
+
+      describe '#order_by_recently_created' do
+        it 'returns shelters with the most recently created first' do
+          expect(Shelter.order_by_recently_created).to eq([@shelter_3, @shelter_2, @shelter_1])
+        end
+      end
+
+      describe '#order_by_number_of_pets' do
+        it 'orders the shelters by number of pets they have, descending' do
+          expect(Shelter.order_by_number_of_pets).to eq([@shelter_1, @shelter_3, @shelter_2])
+        end
       end
     end
 
-    describe '#order_by_recently_created' do
-      it 'returns shelters with the most recently created first' do
-        expect(Shelter.order_by_recently_created).to eq([@shelter_3, @shelter_2, @shelter_1])
+    describe 'instance methods' do
+      describe '.adoptable_pets' do
+        it 'only returns pets that are adoptable' do
+          expect(@shelter_1.adoptable_pets).to eq([@pet_2, @pet_4])
+        end
       end
     end
-
-    describe '#order_by_number_of_pets' do
-      it 'orders the shelters by number of pets they have, descending' do
-        expect(Shelter.order_by_number_of_pets).to eq([@shelter_1, @shelter_3, @shelter_2])
-      end
-    end
-  end
-
-  describe 'instance methods' do
-    describe '.adoptable_pets' do
-      it 'only returns pets that are adoptable' do
-        expect(@shelter_1.adoptable_pets).to eq([@pet_2, @pet_4])
-      end
-    end
-  end
 
     describe '.alphabetical_pets' do
       it 'returns pets associated with the given shelter in alphabetical name order' do
