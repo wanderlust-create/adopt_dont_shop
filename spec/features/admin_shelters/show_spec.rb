@@ -33,7 +33,7 @@ RSpec.describe 'the admin shelters show' do
     ApplicationPet.create!(pet_id:@onion.id, application_id: @app_3.id)
   end
 
-  it 'the admin application show page has a button to approva an adoption' do
+  it 'the admin application show page has a button to approve an adoption' do
 
     visit "/admin/applications/#{@app_1.id}"
 
@@ -54,9 +54,9 @@ RSpec.describe 'the admin shelters show' do
     end
 
     within("#pet_requested-1") do
-      expect(page).to have_content(@mango.name)
-      expect(page).to have_content(@mango.shelter.name)
-      expect(page).to have_button("Approve adoption of #{@mango.name}")
+      expect(page).to have_content(@daisy.name)
+      expect(page).to have_content(@daisy.shelter.name)
+      expect(page).to have_button("Approve adoption of #{@daisy.name}")
     end
 
     within("#pet_requested-2") do
@@ -65,8 +65,8 @@ RSpec.describe 'the admin shelters show' do
       expect(page).to have_button("Approve adoption of #{@artimus.name}")
     end
 
-    click_button("Approve adoption of #{@mango.name}")
+    click_button("Approve adoption of #{@daisy.name}")
 
-    expect(page).not_to have_button("Approve adoption of #{@mango.name}")
-  end 
+    expect(page).not_to have_button("Approve adoption of #{@daisy.name}")
+  end
 end
