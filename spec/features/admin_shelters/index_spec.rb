@@ -15,14 +15,25 @@ RSpec.describe 'the admin shelters index' do
   it 'Admin/Shelters#index lists the shelters in reverse alphabetical order by name' do
     visit '/admin/shelters'
 
-    expect(@shelter_1.name).to appear_before(@shelter_2.name)
-    expect(@shelter_2.name).to appear_before(@shelter_4.name)
-    expect(@shelter_4.name).to appear_before(@shelter_3.name)
+    within("#shelter-0") do
+      expect(page).to have_content(@shelter_1.name)
+    end
+
+    within("#shelter-1") do
+      expect(page).to have_content(@shelter_2.name)
+    end
+
+    within("#shelter-2") do
+      expect(page).to have_content(@shelter_4.name)
+    end
+
+    within("#shelter-3") do
+      expect(page).to have_content(@shelter_3.name)
+    end
 
   end
 
   it 'Admin/Shelters#index lists has a section that lists every shelter that has pending applications' do
-    visit '/admin/shelters'
 
     @app_1= Application.create(first_name: 'Lemon', last_name: 'Tiger', street_address: '1225 Alvaro Obgeron Dr.', city: 'Mexico City, GA', post_code: '67518', status: "In Progress")
     @app_2= Application.create(first_name: 'Salty', last_name: 'Hippo', street_address: '367 CBTIS Overton St.', city: 'Colima, DC', post_code: '14628', status: "Pending")
@@ -33,9 +44,15 @@ RSpec.describe 'the admin shelters index' do
     ApplicationPet.create!(pet_id:@pet_2.id, application_id: @app_2.id)
     ApplicationPet.create!(pet_id:@pet_3.id, application_id: @app_4.id)
 
-    expect("Shelters with pending applications: ").to appear_before(@shelter_3.name)
-    expect(@shelter_3.name).to appear_before(@shelter_1.name)
+    visit '/admin/shelters'
 
+    within("#shelter_apps-0") do
+      expect(page).to have_content(@shelter_1.name)
+    end
+
+    within("#shelter_apps-1") do
+      expect(page).to have_content(@shelter_3.name)
+    end
 
   end
 end
