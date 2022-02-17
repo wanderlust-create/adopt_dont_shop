@@ -1,0 +1,28 @@
+<h1>Application for: <%= @applicant.first_name %> <%= @applicant.last_name %></h1>
+<h3><h3>Address: <%= @applicant.street_address %> <%= @applicant.city %> <%= @applicant.post_code %> </h3></h3>
+<h3>Application Status: <%= @applicant.status %> </h3>
+<br>
+<h2>All Pets Requested to Adopt:</h2>
+  <% @applicant.pets.each_with_index do |pet, index| %>
+      <div id="pet_requested-<%= index %>">
+        <h3>Name: <%= pet.name %></h3>
+        <h3>Shelter: <%= pet.shelter.name %></h3>
+    <br>
+<% if pet.adoptable == true  %>
+    <section class="adopt button">
+        <%= form_with url: "/admin/applications/#{@applicant.id}", method: :patch, local: true do |f| %>
+          <%= f.text_field :pet_id, value: pet.id, hidden: true %>
+          <%= f.text_field :adoptable, value: false, hidden: true %>
+          <%= f.submit "Approve adoption of #{pet.name}" %>
+        <% end %>
+    </section>
+      <% end %>
+      <section class="reject button">
+          <%= form_with url: "/admin/applications/#{@applicant.id}", method: :patch, local: true do |f| %>
+            <%= f.text_field :pet_id, value: pet.id, hidden: true %>
+            <%= f.text_field :adoptable, value: false, hidden: true %>
+            <%= f.submit "Reject adoption of #{pet.name}" %>
+          <% end %>
+      </section>
+    </div>
+<% end %>
