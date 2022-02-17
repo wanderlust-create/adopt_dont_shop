@@ -67,6 +67,53 @@ RSpec.describe 'the admin shelters show' do
 
     click_button("Approve adoption of #{@daisy.name}")
 
-    expect(page).not_to have_button("Approve adoption of #{@daisy.name}")
+    within("#pet_requested-1") do
+
+      expect(page).not_to have_button("Approve adoption of #{@daisy.name}")
+    end
+  end
+
+  it 'the admin application show page has a button to reject an adoption' do
+
+    visit "/admin/applications/#{@app_3.id}"
+
+    expect(page).to have_content(@app_3.first_name)
+    expect(page).to have_content(@app_3.last_name)
+    expect(page).to have_content(@app_3.street_address)
+    expect(page).to have_content(@app_3.city)
+    expect(page).to have_content(@app_3.post_code)
+    expect(page).to have_content(@app_3.status)
+
+    expect(page).not_to have_content(@app_1.first_name)
+    expect(page).not_to have_content(@app_3.first_name)
+
+    within("#pet_requested-0") do
+      expect(page).to have_content(@pineapple.name)
+      expect(page).to have_content(@pineapple.shelter.name)
+      expect(page).to have_button("Approve adoption of #{@pineapple.name}")
+      expect(page).to have_button("Reject adoption of #{@pineapple.name}")
+    end
+
+    within("#pet_requested-1") do
+      expect(page).to have_content(@mango.name)
+      expect(page).to have_content(@mango.shelter.name)
+      expect(page).to have_button("Approve adoption of #{@mango.name}")
+      expect(page).to have_button("Reject adoption of #{@mango.name}")
+    end
+
+    within("#pet_requested-2") do
+      expect(page).to have_content(@onion.name)
+      expect(page).to have_content(@onion.shelter.name)
+      expect(page).to have_button("Approve adoption of #{@onion.name}")
+      expect(page).to have_button("Reject adoption of #{@onion.name}")
+    end
+
+    click_button("Reject adoption of #{@mango.name}")
+
+    within("#pet_requested-1") do
+      expect(page).not_to have_button("Approve adoption of #{@mango.name}")
+      expect(page).not_to have_button("Reject adoption of #{@mango.name}")
+      expect(page).to have_content("#{@mango.name}'s adoption has been rejected.'")
+    end
   end
 end

@@ -5,8 +5,11 @@ class AdminSheltersController < ApplicationController
   end
 
   def show
-    # require "pry"; binding.pry
     @applicant = Application.find(params[:id])
+  end
+
+  def update
+    choosen_pet = Pet.find(params[:pet_id])
   end
 
 end
